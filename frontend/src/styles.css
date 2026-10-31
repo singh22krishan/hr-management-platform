@@ -1,0 +1,29 @@
+:root { font-family: Inter, ui-sans-serif, system-ui, sans-serif; color: #172033; background: #f4f7fb; }
+* { box-sizing: border-box; }
+body { margin: 0; min-width: 320px; min-height: 100vh; }
+button { font: inherit; }
+.page-shell { width: min(1180px, calc(100% - 40px)); margin: 0 auto; padding: 56px 0 36px; }
+.hero { display: flex; justify-content: space-between; gap: 24px; align-items: flex-start; margin-bottom: 30px; }
+.eyebrow { margin: 0 0 8px; font-size: .78rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: #51617f; }
+h1 { margin: 0; font-size: clamp(2.1rem, 5vw, 3.6rem); line-height: 1; }
+.subtitle { max-width: 760px; margin: 16px 0 0; color: #5d687c; line-height: 1.65; }
+.status-card { background: #fff; border: 1px solid #dfe5ef; border-radius: 14px; padding: 12px 16px; box-shadow: 0 8px 30px rgba(40,56,85,.08); font-size: .9rem; }
+.status-dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: #1f9d61; margin-right: 8px; }
+.tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+.tab,.refresh { border: 1px solid #d9e0eb; background: #fff; color: #263247; border-radius: 10px; padding: 10px 15px; cursor: pointer; }
+.tab.active { background: #172033; color: #fff; border-color: #172033; }
+.panel { background: #fff; border: 1px solid #e0e6ef; border-radius: 18px; padding: 24px; box-shadow: 0 10px 35px rgba(40,56,85,.07); }
+.panel-heading { display: flex; justify-content: space-between; gap: 16px; align-items: center; }
+.panel-heading h2 { margin: 0 0 4px; }
+.panel-heading p { margin: 0; color: #707b8d; }
+.notice,.empty-state { margin-top: 22px; padding: 18px; border-radius: 12px; background: #f7f9fc; color: #526075; }
+.table-wrap { margin-top: 22px; overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: .92rem; }
+th,td { padding: 12px 14px; border-bottom: 1px solid #e7ebf2; text-align: left; white-space: nowrap; }
+th { color: #5a6578; font-size: .78rem; text-transform: uppercase; letter-spacing: .04em; }
+.capabilities { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-top: 18px; }
+.capabilities article { background: #fff; border: 1px solid #e0e6ef; border-radius: 16px; padding: 20px; }
+.capabilities h3 { margin: 0 0 8px; }
+.capabilities p { margin: 0; color: #697589; line-height: 1.55; }
+footer { margin-top: 28px; color: #7a8494; font-size: .88rem; }
+@media (max-width: 760px) { .page-shell { width: min(100% - 24px,1180px); padding-top: 30px; } .hero { flex-direction: column; } .capabilities { grid-template-columns: 1fr; } }
