@@ -10,7 +10,10 @@ A full-stack human resources management application built with **React, Node.js,
 - Oracle stored procedures, functions, `SYS_REFCURSOR`, and triggers
 - Database-side salary-range enforcement
 - Oracle bind-variable integration from Express
-- REST API built with Express
+- Request validation for IDs, email, dates, salary ranges, and text lengths
+- Helmet security headers, rate limiting, restricted CORS, and bounded JSON bodies
+- Generic production-facing database errors
+- Node validation tests + GitHub Actions CI
 - React dashboard for employees, jobs, and departments
 - Environment-based configuration with no committed production credentials
 
@@ -29,9 +32,10 @@ Oracle Database + PL/SQL procedures/functions/triggers
 ## Technology Stack
 
 - **Frontend:** React, Vite, JavaScript
-- **Backend:** Node.js, Express
+- **Backend:** Node.js, Express, Helmet, express-rate-limit
 - **Database:** Oracle Database
 - **Database Programming:** SQL, PL/SQL, stored procedures, functions, cursors and triggers
+- **Verification:** Node test runner, GitHub Actions
 
 ## Repository Structure
 
@@ -40,7 +44,10 @@ backend/
 ├── .env.example
 ├── db.js
 ├── package.json
-└── server.js
+├── server.js
+├── validation.js
+└── test/
+    └── validation.test.js
 
 database/
 ├── README.md
@@ -66,37 +73,19 @@ The `database/` directory contains the cleaned database-programming layer that s
 
 ### Employee lifecycle
 
-`employees.sql` provides:
-
-- `employee_hire_sp`
-- `employee_update_sp`
-- `employee_terminate_sp`
+`employees.sql` provides `employee_hire_sp`, `employee_update_sp`, and `employee_terminate_sp`.
 
 ### Job management
 
-`jobs.sql` provides:
-
-- `new_job_sp`
-- `update_job_sp`
-- `get_job()`
+`jobs.sql` provides `new_job_sp`, `update_job_sp`, and `get_job()`.
 
 ### Salary validation
 
-`salary_validation.sql` provides:
-
-- reusable `check_salary` procedure
-- `check_salary_trg` row-level trigger
-- database-enforced validation against the minimum and maximum salary configured for a job
-
-This means salary rules are enforced in Oracle rather than relying only on frontend or API validation.
+`salary_validation.sql` provides the reusable `check_salary` procedure and the `check_salary_trg` row-level trigger. Salary rules are therefore enforced in Oracle rather than relying only on frontend or API validation.
 
 ### Department management
 
-`departments.sql` provides:
-
-- `list_departments_sp` using `SYS_REFCURSOR`
-- `create_department_sp`
-- `update_department_sp`
+`departments.sql` provides `list_departments_sp` using `SYS_REFCURSOR`, `create_department_sp`, and `update_department_sp`.
 
 See [`database/README.md`](database/README.md) for expected schema objects and installation order.
 
@@ -106,8 +95,9 @@ See [`database/README.md`](database/README.md) for expected schema objects and i
 2. In `backend/`, run `npm install`.
 3. Copy `.env.example` to `.env`.
 4. Configure your own Oracle credentials and connection string.
-5. Install the PL/SQL scripts from `database/` against your Oracle schema.
-6. Run `npm start`.
+5. Optionally set `CORS_ORIGINS` to the allowed frontend origins; local Vite origins are used by default.
+6. Install the PL/SQL scripts from `database/` against your Oracle schema.
+7. Run `npm start`.
 
 ## Frontend Setup
 
@@ -131,11 +121,28 @@ See [`database/README.md`](database/README.md) for expected schema objects and i
 - `POST /api/departments`
 - `PUT /api/departments/:id`
 
-## Security and Privacy
+## Tests
 
-Real `.env` files, credentials, database passwords, and local dependency folders are excluded from this portfolio repository. Only safe example environment files are committed.
+```bash
+cd backend
+npm install
+npm test
+```
 
-The original academic repository is retained privately because older history contained classroom database configuration. This public portfolio repository has separate clean history.
+GitHub Actions runs the validation tests on pushes and pull requests.
+
+## Security and Deployment Scope
+
+- Real `.env` files, database credentials, passwords, and dependency folders are excluded.
+- Helmet security headers are enabled.
+- API traffic is rate-limited and JSON request bodies are capped at 64 KB.
+- CORS defaults to local frontend origins and can be configured through `CORS_ORIGINS`.
+- Request fields are validated before Oracle calls.
+- Internal Oracle error messages are logged server-side and not returned directly to clients.
+
+This is a **portfolio/local application**, not a production HR system. It does not implement user authentication or role-based authorization, so it should **not be exposed publicly with employee write routes enabled** without adding authentication/RBAC and deployment-level access controls.
+
+The original academic repository remains private because older history contained classroom database configuration. This public portfolio repository has separate clean history.
 
 ## Academic Context
 
