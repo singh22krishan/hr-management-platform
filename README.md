@@ -5,10 +5,11 @@ A full-stack human resources management application built with **React, Node.js,
 ## Highlights
 
 - Employee hiring, retrieval, updates, and termination workflows
-- Job creation and salary-range management
+- Job creation, updates, and job-title lookup
 - Department creation and updates
-- Oracle stored-procedure integration
-- Database-side business-rule enforcement
+- Oracle stored procedures, functions, `SYS_REFCURSOR`, and triggers
+- Database-side salary-range enforcement
+- Oracle bind-variable integration from Express
 - REST API built with Express
 - React dashboard for employees, jobs, and departments
 - Environment-based configuration with no committed production credentials
@@ -22,7 +23,7 @@ React / Vite frontend
 Node.js + Express REST API
         |
         v
-Oracle Database + PL/SQL procedures/functions
+Oracle Database + PL/SQL procedures/functions/triggers
 ```
 
 ## Technology Stack
@@ -30,7 +31,7 @@ Oracle Database + PL/SQL procedures/functions
 - **Frontend:** React, Vite, JavaScript
 - **Backend:** Node.js, Express
 - **Database:** Oracle Database
-- **Database Programming:** SQL, PL/SQL, stored procedures, functions and triggers
+- **Database Programming:** SQL, PL/SQL, stored procedures, functions, cursors and triggers
 
 ## Repository Structure
 
@@ -40,6 +41,13 @@ backend/
 ├── db.js
 ├── package.json
 └── server.js
+
+database/
+├── README.md
+├── employees.sql
+├── jobs.sql
+├── salary_validation.sql
+└── departments.sql
 
 frontend/
 ├── .env.example
@@ -52,13 +60,54 @@ frontend/
     └── styles.css
 ```
 
+## Oracle PL/SQL Layer
+
+The `database/` directory contains the cleaned database-programming layer that supports the application.
+
+### Employee lifecycle
+
+`employees.sql` provides:
+
+- `employee_hire_sp`
+- `employee_update_sp`
+- `employee_terminate_sp`
+
+### Job management
+
+`jobs.sql` provides:
+
+- `new_job_sp`
+- `update_job_sp`
+- `get_job()`
+
+### Salary validation
+
+`salary_validation.sql` provides:
+
+- reusable `check_salary` procedure
+- `check_salary_trg` row-level trigger
+- database-enforced validation against the minimum and maximum salary configured for a job
+
+This means salary rules are enforced in Oracle rather than relying only on frontend or API validation.
+
+### Department management
+
+`departments.sql` provides:
+
+- `list_departments_sp` using `SYS_REFCURSOR`
+- `create_department_sp`
+- `update_department_sp`
+
+See [`database/README.md`](database/README.md) for expected schema objects and installation order.
+
 ## Backend Setup
 
 1. Install Node.js 18 or newer.
 2. In `backend/`, run `npm install`.
 3. Copy `.env.example` to `.env`.
 4. Configure your own Oracle credentials and connection string.
-5. Run `npm start`.
+5. Install the PL/SQL scripts from `database/` against your Oracle schema.
+6. Run `npm start`.
 
 ## Frontend Setup
 
