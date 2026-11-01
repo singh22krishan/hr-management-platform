@@ -1,5 +1,7 @@
 # HR Management Platform
 
+[![Backend Tests](https://github.com/singh22krishan/hr-management-platform/actions/workflows/backend-tests.yml/badge.svg)](https://github.com/singh22krishan/hr-management-platform/actions/workflows/backend-tests.yml)
+
 A full-stack human resources management application built with **React, Node.js, Express, Oracle Database, SQL, and PL/SQL**. This repository is a clean standalone portfolio implementation derived from an academic Advanced Database project.
 
 ## Highlights
